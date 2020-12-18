@@ -1,0 +1,33 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vendormicroservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: VendorMicroService
+  template:
+    metadata:
+      labels:
+        app: VendorMicroService
+    spec:
+      containers:
+      - name: retailvendorrepos
+        image: productcr.azurecr.io/retailvendorrepos:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: productsn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vendormicroservice
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: VendorMicroService
